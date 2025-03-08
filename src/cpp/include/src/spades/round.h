@@ -1,24 +1,34 @@
-#ifndef SPADES_ROUND_H
-#define SPADES_ROUND_H
+#ifndef ROUND_H
+#define ROUND_H
 
-namespace spades {
+#include <string>
+class Game;
+class Card;
+class Player;
 
 class Round {
  public:
-  Round();
-  ~Round();
+  Round(const Game* const game);
 
-  void startRound();
-  void endRound();
-  void playCard(int playerId, int cardId);
-  int getScore(int playerId) const;
+  const Game* const getGame() const;
+  const int getLeadDirIndx() const;
+  const std::string toString() const;
+
+  void run();
 
  private:
-  void calculateScores();
+  const Game* const game;
 
-  // Add member variables as needed
+  int leadDirIndx;
+
+  void dealCards();
+  void initCards(const Card* cards[52]);
+  void shuffleCards(const Card* cards[52]);
+  void dealHand(const Card* const cards[13], Player* const player);
+  void runBidding();
+  void runTrick();
+  void updateScores();
+  void handleNilBids();
 };
 
-}  // namespace spades
-
-#endif  // SPADES_ROUND_H
+#endif  // ROUND_H

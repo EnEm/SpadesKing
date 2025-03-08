@@ -1,6 +1,5 @@
 set(SOURCES
     config.cpp
-    random.cpp
     stats.cpp
 )
 

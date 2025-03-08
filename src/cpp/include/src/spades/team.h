@@ -1,24 +1,34 @@
-#ifndef SPADES_TEAM_H
-#define SPADES_TEAM_H
+#ifndef TEAM_H
+#define TEAM_H
 
 #include <string>
-#include <vector>
 
-#include "player.h"
+class Player;
 
 class Team {
  public:
-  Team(const std::string& name);
+  enum DirectionPair { NORTH_SOUTH, EAST_WEST };
+  Team(Player* const player1, Player* const player2,
+       const DirectionPair& directionPair);
 
-  void addPlayer(const Player& player);
-  int getScore() const;
-  void addScore(int points);
-  std::string getName() const;
+  const Player* const getPlayer(const int index) const;
+  const DirectionPair& getDirectionPair() const;
+  const std::string toString() const;
+
+  int getBidValue() const;
+  int getTricks() const;
+
+  int getFinalScore() const;
+  void addScore(int score);
+  void addBags(int bags);
 
  private:
-  std::string name;
-  std::vector<Player> players;
-  int score;
+  const Player* const players[2];
+  const DirectionPair directionPair;
+
+  // Usual Spades score / 10 , So 233 would be 23 here with 3 bags.
+  int score = 0;
+  int bags = 0;
 };
 
-#endif  // SPADES_TEAM_H
+#endif  // TEAM_H

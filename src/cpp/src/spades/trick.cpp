@@ -1,47 +1,47 @@
 #include "trick.h"
 
-#include <algorithm>
 #include <iostream>
+#include <stdexcept>
 
-Trick::Trick() : leadSuit(), cards() {}
+#include "card.h"
+#include "game.h"
+#include "player.h"
+#include "round.h"
 
-void Trick::addCard(const Card& card) {
-  if (cards.empty()) {
-    leadSuit = card.getSuit();
-  }
-  cards.push_back(card);
+Trick::Trick(const Round* const round) : round(round) {
+  leadDirIndx = round->getLeadDirIndx();
 }
 
-Suit Trick::getLeadSuit() const { return leadSuit; }
+const Round* const Trick::getRound() const { return round; }
 
-Card Trick::getWinningCard() const {
-  if (cards.empty()) {
-    throw std::runtime_error("No cards in trick");
+const std::string Trick::toString() const {
+  // TODO
+  return "Trick details";
+}
+
+void Trick::run() {
+  for (int indx = 0; indx < 4; indx++) {
+    round->getGame()->getPlayer((leadDirIndx + indx) % 4)->playCard(this);
   }
+}
 
-  Card winningCard = cards[0];
-  for (const auto& card : cards) {
-    if (card.getSuit() == leadSuit && card.getRank() > winningCard.getRank()) {
-      winningCard = card;
-    } else if (card.getSuit() == Suit::SPADES &&
-               winningCard.getSuit() != Suit::SPADES) {
-      winningCard = card;
-    } else if (card.getSuit() == Suit::SPADES &&
-               card.getRank() > winningCard.getRank()) {
-      winningCard = card;
+void Trick::addCard(const Card card, int dirIndx) { cards[dirIndx] = card; }
+
+const int Trick::getWinningPlayerDirIndx() const {
+  int winningDirIndx = leadDirIndx;
+
+  for (int i = 1; i < 4; i++) {
+    int curIndx = (leadDirIndx + i) % 4;
+
+    const Card& currentCard = cards[curIndx];
+    const Card& winningCard = cards[leadDirIndx];
+    if ((currentCard.getSuit() == winningCard.getSuit() &&
+         currentCard.getRank() > winningCard.getRank()) ||
+        (currentCard.getSuit() == Card::Suit::SPADES &&
+         winningCard.getSuit() != Card::Suit::SPADES)) {
+      winningDirIndx = curIndx;
     }
   }
-  return winningCard;
-}
 
-void Trick::toString() const {
-  for (const auto& card : cards) {
-    std::cout << card << " ";
-  }
-  std::cout << std::endl;
-}
-
-std::ostream& operator<<(std::ostream& os, const Card& card) {
-  os << card.toString();
-  return os;
+  return winningDirIndx;
 }

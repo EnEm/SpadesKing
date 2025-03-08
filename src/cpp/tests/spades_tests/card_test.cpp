@@ -2,8 +2,13 @@
 
 #include <gtest/gtest.h>
 
-// Sample test case
-TEST(ExampleTest, SampleTest) {
-  EXPECT_EQ(1 + 1, 2);
-  EXPECT_TRUE(true);
+TEST(SpadesTest, CardStringTest) {
+  EXPECT_EQ(Card(Card::Suit::CLUBS, Card::Rank::SEVEN).toString(),
+            "7 of Clubs");
+  EXPECT_EQ(Card(Card::Suit::SPADES, Card::Rank::ACE).toString(),
+            "Ace of Spades");
+  EXPECT_EQ(Card(Card::Suit::HEARTS, Card::Rank::KING).toString(),
+            "King of Hearts");
+  EXPECT_EQ(Card(Card::Suit::DIAMONDS, Card::Rank::QUEEN).toString(),
+            "Queen of Diamonds");
 }

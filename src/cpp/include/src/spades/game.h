@@ -1,27 +1,31 @@
-#ifndef SPADES_GAME_H
-#define SPADES_GAME_H
+#ifndef GAME_H
+#define GAME_H
 
 #include <string>
 #include <vector>
 
 class Player;
+class Team;
 
 class Game {
  public:
-  Game();
-  ~Game();
+  Game(Player* const players[4], const int scoreLimit);
 
-  void addPlayer(const Player& player);
-  void startGame();
-  void playRound();
-  void endGame();
+  const int getLeadDirIndx() const;
+  Player* const getPlayer(const int dirIndx) const;
+  Team* const getTeam(const int dirPairIndx) const;
+  const std::string toString() const;
+
+  void run();
+  std::vector<int> getScores() const;
 
  private:
-  std::vector<Player> players;
-  int currentRound;
-  void shuffleDeck();
-  void dealCards();
-  void scoreRound();
+  int leadDirIndx;
+  Player* const players[4];
+  Team* teams[2];
+  const int scoreLimit;
+
+  std::string initString() const;
 };
 
-#endif  // SPADES_GAME_H
+#endif  // GAME_H

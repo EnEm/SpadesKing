@@ -1,23 +1,31 @@
 #ifndef TRICK_H
 #define TRICK_H
 
-#include <vector>
+#include <string>
 
 #include "card.h"
 
+class Round;
+class Player;
+
 class Trick {
  public:
-  Trick();
-  void addCard(const Card& card);
-  Suit getLeadSuit() const;
-  Card getWinningCard() const;
-  void toString() const;
+  Trick(const Round* const round);
+
+  const Round* const getRound() const;
+  const std::string toString() const;
+
+  void run();
+  void addCard(const Card card, int dirIndx);
+
+  const int getWinningPlayerDirIndx() const;
 
  private:
-  Suit leadSuit;
-  std::vector<Card> cards;
-};
+  const Round* const round;
 
-std::ostream& operator<<(std::ostream& os, const Trick& card);
+  int leadDirIndx;
+
+  Card cards[4];
+};
 
 #endif  // TRICK_H

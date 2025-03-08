@@ -3,39 +3,40 @@
 
 #include <string>
 
-enum Suit { HEARTS, DIAMONDS, CLUBS, SPADES };
-
-enum Rank {
-  TWO,
-  THREE,
-  FOUR,
-  FIVE,
-  SIX,
-  SEVEN,
-  EIGHT,
-  NINE,
-  TEN,
-  JACK,
-  QUEEN,
-  KING,
-  ACE
-};
-
 class Card {
  public:
-  Card(Suit suit, Rank rank);
+  enum Suit { HEARTS, DIAMONDS, CLUBS, SPADES };
+  enum Rank {
+    TWO,
+    THREE,
+    FOUR,
+    FIVE,
+    SIX,
+    SEVEN,
+    EIGHT,
+    NINE,
+    TEN,
+    JACK,
+    QUEEN,
+    KING,
+    ACE
+  };
 
-  Suit getSuit() const;
+  Card() = default;
+  Card(const Suit& suit, const Rank& rank);
 
-  Rank getRank() const;
+  const Suit& getSuit() const;
+  const Rank& getRank() const;
 
-  std::string toString() const;
+  const std::string toString() const;
+
+  bool operator==(const Card& other) const {
+    return suit == other.suit && rank == other.rank;
+  }
 
  private:
   Suit suit;
   Rank rank;
 };
-
-std::ostream& operator<<(std::ostream& os, const Card& card);
 
 #endif  // CARD_H
