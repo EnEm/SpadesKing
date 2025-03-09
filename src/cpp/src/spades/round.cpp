@@ -18,8 +18,17 @@ const Game* const Round::getGame() const { return game; }
 const int Round::getLeadDirIndx() const { return leadDirIndx; }
 
 const std::string Round::toString() const {
-  // TODO
-  return "Round details";
+  std::string result = "Round details:\n";
+  for (int dirIndx = 0; dirIndx < 4; dirIndx++) {
+    const Player* const player = game->getPlayer(dirIndx);
+    const std::string directionString =
+        Player::directionToString(player->getDirection());
+    const std::string playerName = player->getName();
+    result += directionString + " : " + playerName + "\n";
+    result += "Bid = " + std::to_string(player->getBidValue()) + ", ";
+    result += "Tricks = " + std::to_string(player->getTricks()) + "\n";
+  }
+  return result;
 }
 
 void Round::run() {

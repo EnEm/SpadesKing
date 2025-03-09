@@ -24,6 +24,17 @@ const std::string Team::toString() const {
   return players[0]->getName() + " and " + players[1]->getName();
 }
 
+const std::string Team::directionPairToString(
+    Team::DirectionPair directionPair) {
+  switch (directionPair) {
+    case DirectionPair::NORTH_SOUTH:
+      return "North-South";
+    case DirectionPair::EAST_WEST:
+      return "East-West";
+  }
+  return "Default-Direction-Pair";
+}
+
 int Team::getBidValue() const {
   return players[0]->getBidValue() + players[1]->getBidValue();
 }

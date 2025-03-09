@@ -25,37 +25,76 @@ void HumanPlayer::makeBid(const Round* round) {
 void HumanPlayer::displayHand() const {
   std::cout << "Hand: ";
   for (const Card& card : getHand()) {
-    std::cout << card.toString() << " ";
+    std::cout << card.toString(true) << " ";
   }
   std::cout << std::endl;
 }
 
-void HumanPlayer::displayGameState(const Trick* trick) const {
+void HumanPlayer::displayGameState(const Trick* trick) {
   displayGameState(trick->getRound());
-  std::cout << "Current trick: " << trick->toString() << std::endl;
+  std::cout << trick->toString() << std::endl;
 }
 
-void HumanPlayer::displayGameState(const Round* round) const {
+void HumanPlayer::displayGameState(const Round* round) {
   displayGameState(round->getGame());
-  std::cout << "Current round: " << round->toString() << std::endl;
+  std::cout << round->toString() << std::endl;
 }
 
-void HumanPlayer::displayGameState(const Game* game) const {
-  std::cout << "Current game: " << game->toString() << std::endl;
+void HumanPlayer::displayGameState(const Game* game) {
+  displayGameState();
+  std::cout << game->toString() << std::endl;
+}
+
+void HumanPlayer::displayGameState() {
+  std::cout << std::string(50, '=') << std::endl << std::endl;
 }
 
 const Card HumanPlayer::askForCard(const Trick* trick) const {
-  std::cout << "Enter card to play: ";
-  std::string suit;
-  std::string rank;
-  std::cin >> rank >> suit;
-  return Card(static_cast<Card::Suit>(std::stoi(suit)),
-              static_cast<Card::Rank>(std::stoi(rank)));
+  std::vector<Card> playableCards;
+  for (const Card& card : getHand()) {
+    if (canPlayCard(card, trick)) {
+      playableCards.push_back(card);
+    }
+  }
+
+  std::cout << "Playable cards: " << std::endl;
+  for (size_t i = 0; i < playableCards.size(); ++i) {
+    std::cout << i + 1 << ": " << playableCards[i].toString() << std::endl;
+  }
+
+  std::cout << "Enter the number of the card you want to play: ";
+  int choice = getValidatedInput(1, static_cast<int>(playableCards.size()));
+  return playableCards[choice - 1];
 }
 
 const int HumanPlayer::askForBid(const Round* round) const {
   std::cout << "Enter bid: ";
-  int bid;
-  std::cin >> bid;
-  return bid;
+  return getValidatedInput(0, 13);
+}
+
+const int HumanPlayer::getValidatedInput(int min, int max) {
+  int value = -1;
+  while (true) {
+    std::string input;
+    std::getline(std::cin, input);
+
+    bool valid = true;
+    for (char c : input) {
+      if (!isdigit(c)) {
+        valid = false;
+        break;
+      }
+    }
+    if (input.size() > 9) valid = false;
+
+    if (valid) {
+      value = std::stoi(input);
+      if (value >= min && value <= max) {
+        break;
+      }
+    }
+    std::cout << "Invalid input. Please enter a number between " << min
+              << " and " << max << ": ";
+  }
+  return value;
 }

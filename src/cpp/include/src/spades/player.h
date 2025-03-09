@@ -15,6 +15,7 @@ class Game;
 class Player {
  public:
   enum Direction { NORTH, EAST, SOUTH, WEST };
+  static const std::string directionToString(const Direction& direction);
 
   Player(const std::string& name);
 
@@ -39,7 +40,6 @@ class Player {
 
   void removeCard(const Card& card);
   bool canPlayCard(const Card& card, const Trick* trick) const;
-  bool hasCard(const Card& card) const;
 
  private:
   const std::string name;
@@ -49,6 +49,11 @@ class Player {
   int bidValue;
   int tricks;
   std::vector<Card> hand;
+
+  bool hasCard(const Card& card) const;
+  bool hasSuit(const Card::Suit& suit) const;
+
+  void sortHand();
 };
 
 class HumanPlayer : public Player {
@@ -59,11 +64,14 @@ class HumanPlayer : public Player {
 
  private:
   void displayHand() const;
-  void displayGameState(const Trick* trick) const;
-  void displayGameState(const Round* round) const;
-  void displayGameState(const Game* game) const;
+  static void displayGameState(const Trick* trick);
+  static void displayGameState(const Round* round);
+  static void displayGameState(const Game* game);
+  static void displayGameState();
+
   const Card askForCard(const Trick* trick) const;
   const int askForBid(const Round* round) const;
+  static const int getValidatedInput(int min, int max);
 };
 
 class ComputerPlayer : public Player {

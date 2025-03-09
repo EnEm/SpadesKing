@@ -8,6 +8,8 @@ class Player;
 class Team {
  public:
   enum DirectionPair { NORTH_SOUTH, EAST_WEST };
+  static const std::string directionPairToString(DirectionPair directionPair);
+
   Team(Player* const player1, Player* const player2,
        const DirectionPair& directionPair);
 

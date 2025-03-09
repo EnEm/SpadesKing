@@ -30,7 +30,17 @@ Player* const Game::getPlayer(const int dirIndx) const {
 
 const int Game::getLeadDirIndx() const { return leadDirIndx; }
 
-const std::string Game::toString() const { return "Game state representation"; }
+const std::string Game::toString() const {
+  std::string result = "Score Limit: " + std::to_string(scoreLimit) + "\n";
+  for (int dirPairIndx = 0; dirPairIndx < 2; dirPairIndx++) {
+    const Team* const team = teams[dirPairIndx];
+    const std::string dirPairString =
+        Team::directionPairToString(team->getDirectionPair());
+    result += (dirPairString + " : " + team->toString() + "\n");
+    result += ("Score: " + std::to_string(team->getFinalScore()) + "\n");
+  }
+  return result;
+}
 
 void Game::run() {
   std::cout << initString() << std::endl;

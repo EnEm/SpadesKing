@@ -28,11 +28,9 @@ class Card {
   const Suit& getSuit() const;
   const Rank& getRank() const;
 
-  const std::string toString() const;
+  const std::string toString(bool shortForm = false) const;
 
-  bool operator==(const Card& other) const {
-    return suit == other.suit && rank == other.rank;
-  }
+  const bool operator==(const Card& other) const;
 
  private:
   Suit suit;

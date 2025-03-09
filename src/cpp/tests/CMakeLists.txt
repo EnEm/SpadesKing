@@ -5,10 +5,9 @@ FetchContent_Declare(
     DOWNLOAD_EXTRACT_TIMESTAMP true
 )
 FetchContent_MakeAvailable(googletest)
-enable_testing()
 
-add_executable(card_test spades_tests/card_test.cpp)
+add_executable(spades_test spades_test.cpp)
 
-target_link_libraries(card_test PRIVATE spades gtest gtest_main)
+target_link_libraries(spades_test PRIVATE spades gtest gtest_main)
 
-add_test(NAME SpadesTest COMMAND card_test)
+add_test(NAME SpadesTest COMMAND spades_test)
